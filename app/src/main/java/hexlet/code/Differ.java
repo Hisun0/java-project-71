@@ -6,9 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 public class Differ {
+    private static final String LABEL_ADD = "+ ";
+    private static final String LABEL_DELETED = "- ";
+    private static final String LABEL_UNCHANGED = "+ ";
     public static Map<String, String> parse(String filepath1) throws IOException {
         Path pathToFile = Path.of(filepath1);
 
@@ -20,7 +29,9 @@ public class Differ {
         });
     }
 
-    public static ArrayList<HashMap<String, String>> generateDiffObj(Map<String, String> data1, Map<String, String> data2) {
+    public static ArrayList<HashMap<String, String>> generateDiffObj(
+            Map<String, String> data1, Map<String, String> data2
+    ) {
         Set<String> keys = new HashSet<>(data1.keySet());
         keys.addAll(data2.keySet());
 
@@ -46,53 +57,46 @@ public class Differ {
         return result;
     }
 
-    public static void generate(String filepath1, String filepath2) throws IOException {
+    public static String generate(String filepath1, String filepath2) throws IOException {
         Map<String, String> data1 = parse(filepath1);
         Map<String, String> data2 = parse(filepath2);
 
         ArrayList<HashMap<String, String>> diffObj = generateDiffObj(data1, data2);
 
-        Map<String, String> labels = Map.of(
-                "deleted", "- ",
-                "added", "+ ",
-                "changed", "  ",
-                    "unchanged", "  "
-        );
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{").append("\n");
-
-        String space = "  ";
 
         diffObj.forEach((obj) -> obj.forEach((key, value) -> {
             switch (value) {
                 case "deleted":
-                    stringBuilder.append(space).append(labels.get(value)).append(key).append(": ").append(data1.get(key)).append("\n");
+                    makeDiffString(stringBuilder, LABEL_DELETED, key, data1.get(key));
                     break;
                 case "added":
-                    stringBuilder.append(space).append(labels.get(value)).append(key).append(": ").append(data2.get(key)).append("\n");
+                    makeDiffString(stringBuilder, LABEL_ADD, key, data2.get(key));
                     break;
                 case "changed":
-                    stringBuilder
-                            .append(space)
-                            .append(labels.get("deleted"))
-                            .append(key)
-                            .append(": ")
-                            .append(data1.get(key))
-                            .append("\n")
-                            .append(space)
-                            .append(labels.get("added"))
-                            .append(key)
-                            .append(": ")
-                            .append(data2.get(key))
-                            .append("\n");
+                    makeDiffString(stringBuilder, LABEL_DELETED, key, data1.get(key));
+                    makeDiffString(stringBuilder, LABEL_ADD, key, data2.get(key));
                     break;
                 default:
-                    stringBuilder.append(space).append(labels.get(value)).append(key).append(": ").append(data1.get(key)).append("\n");
+                    makeDiffString(stringBuilder, LABEL_UNCHANGED, key, data1.get(key));
             }
         }));
 
         stringBuilder.append("}");
         System.out.println(stringBuilder);
+
+        return String.valueOf(stringBuilder);
+    }
+
+    private static void makeDiffString(StringBuilder stringBuilder, String label, String key, String value) {
+        String space = "  ";
+        stringBuilder
+                .append(space)
+                .append(label)
+                .append(key)
+                .append(": ")
+                .append(value)
+                .append("\n");
     }
 }
