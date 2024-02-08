@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     application
-    jacoco
+    id("jacoco")
     id("java")
     id("checkstyle")
 }
