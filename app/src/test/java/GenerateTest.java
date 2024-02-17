@@ -13,6 +13,8 @@ public class GenerateTest {
     private static String stylishResult;
     private static final String JSON_PATH1 = "src/test/resources/file1.json";
     private static final String JSON_PATH2 = "src/test/resources/file2.json";
+    private static final String YAML_PATH1 = "src/test/resources/file1.yaml";
+    private static final String YAML_PATH2 = "src/test/resources/file2.yml";
 
     @BeforeAll
     public static void getResult() throws IOException {
@@ -24,5 +26,6 @@ public class GenerateTest {
     @Test
     public void stylishJsonTest() throws IOException {
         assertEquals(stylishResult, Differ.generate(JSON_PATH1, JSON_PATH2));
+        assertEquals(stylishResult, Differ.generate(YAML_PATH1, YAML_PATH2));
     }
 }
