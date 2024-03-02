@@ -30,7 +30,7 @@ public class GenerateTest {
         String filepath1 = getFilePath(JSON_FILES[0]);
         String filepath2 = getFilePath(JSON_FILES[1]);
 
-        assertEquals(stylishResult, Differ.generate(filepath1, filepath2, "stylish"));
+        assertEquals(stylishResult, Differ.generate(filepath1, filepath2));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class GenerateTest {
         String filepath1 = getFilePath(YAML_FILES[0]);
         String filepath2 = getFilePath(YAML_FILES[1]);
 
-        assertEquals(stylishResult, Differ.generate(filepath1, filepath2, "stylish"));
+        assertEquals(stylishResult, Differ.generate(filepath1, filepath2));
     }
 
     @Test
