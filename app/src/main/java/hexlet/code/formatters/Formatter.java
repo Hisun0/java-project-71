@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Formatter {
-    public static String format(ArrayList<HashMap<String, Object>> diffObj, String formatName) throws JsonProcessingException {
+    public static String format(ArrayList<HashMap<String, Object>> diffObj, String formatName)
+            throws JsonProcessingException {
         return switch (formatName) {
             case "stylish" -> Stylish.format(diffObj);
             case "plain" -> Plain.format(diffObj);
