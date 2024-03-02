@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GenerateTest {
-    private static final String[] FILE_NAMES_FOR_RESULT = {"stylishResult.txt", "plainResult.txt"};
+    private static final String[] FILE_NAMES_FOR_RESULT = {"stylishResult.txt", "plainResult.txt", "jsonResult.txt"};
     private static final String[] DIFFS_RESULT = new String[FILE_NAMES_FOR_RESULT.length];
     private static final String TEST_RESOURCES_DIR = "src/test/resources/";
     private static final String[] JSON_FILES = {"file1.json", "file2.json"};
@@ -58,6 +58,24 @@ public class GenerateTest {
         String filepath2 = getFilePath(YAML_FILES[1]);
 
         assertEquals(plainResult, Differ.generate(filepath1, filepath2, "plain"));
+    }
+
+    @Test
+    public void jsonTestForJson() throws IOException {
+        String jsonResult = DIFFS_RESULT[2];
+        String filepath1 = getFilePath(JSON_FILES[0]);
+        String filepath2 = getFilePath(JSON_FILES[1]);
+
+        assertEquals(jsonResult, Differ.generate(filepath1, filepath2, "json"));
+    }
+
+    @Test
+    public void jsonTestForYaml() throws IOException {
+        String jsonResult = DIFFS_RESULT[2];
+        String filepath1 = getFilePath(YAML_FILES[0]);
+        String filepath2 = getFilePath(YAML_FILES[1]);
+
+        assertEquals(jsonResult, Differ.generate(filepath1, filepath2, "json"));
     }
 
     private static String getFilePath(String filename) {
